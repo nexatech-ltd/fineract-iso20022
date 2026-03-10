@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.007.001.11">
+    <CstmrPmtRvsl>
+        <GrpHdr>
+            <MsgId>RVSL-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <InitgPty>
+                <Nm>Test Initiating Party</Nm>
+            </InitgPty>
+        </GrpHdr>
+        <OrgnlGrpInf>
+            <OrgnlMsgId>ORIG-MSG-001</OrgnlMsgId>
+            <OrgnlMsgNmId>pain.001.001.11</OrgnlMsgNmId>
+            <RvslRsnInf>
+                <Rsn>
+                    <Cd>DUPL</Cd>
+                </Rsn>
+            </RvslRsnInf>
+        </OrgnlGrpInf>
+        <OrgnlPmtInfAndRvsl>
+            <OrgnlPmtInfId>PMT-001</OrgnlPmtInfId>
+            <TxInf>
+                <RvslId>RVSL-INSTR-001</RvslId>
+                <OrgnlEndToEndId>E2E-001</OrgnlEndToEndId>
+                <OrgnlInstdAmt Ccy="EUR">1000.00</OrgnlInstdAmt>
+            </TxInf>
+        </OrgnlPmtInfAndRvsl>
+    </CstmrPmtRvsl>
+</Document>

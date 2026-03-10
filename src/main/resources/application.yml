@@ -1,0 +1,122 @@
+server:
+  port: 8081
+  tomcat:
+    max-http-form-post-size: 5MB
+    max-swallow-size: 5MB
+
+spring:
+  application:
+    name: fineract-iso20022-adapter
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:iso20022_adapter}?useSSL=${DB_USE_SSL:false}&allowPublicKeyRetrieval=true&serverTimezone=UTC&requireSSL=${DB_REQUIRE_SSL:false}
+    username: ${DB_USERNAME:iso20022}
+    password: ${DB_PASSWORD:iso20022pass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 600000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+      ssl:
+        enabled: ${REDIS_SSL_ENABLED:false}
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 4
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: iso20022-adapter
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+    properties:
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      ssl.truststore.location: ${KAFKA_SSL_TRUSTSTORE:}
+      ssl.truststore.password: ${KAFKA_SSL_TRUSTSTORE_PASSWORD:}
+      ssl.keystore.location: ${KAFKA_SSL_KEYSTORE:}
+      ssl.keystore.password: ${KAFKA_SSL_KEYSTORE_PASSWORD:}
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+fineract:
+  api:
+    base-url: ${FINERACT_API_URL:http://localhost:8443/fineract-provider/api/v1}
+    username: ${FINERACT_API_USERNAME:mifos}
+    password: ${FINERACT_API_PASSWORD:password}
+    tenant-id: ${FINERACT_TENANT_ID:default}
+    connect-timeout: 10000
+    read-timeout: 30000
+
+iso20022:
+  kafka:
+    inbound-topic: iso20022.inbound
+    outbound-topic: iso20022.outbound
+    status-topic: iso20022.status
+    dlq-topic: iso20022.dlq
+  cache:
+    idempotency-ttl: 86400
+    account-cache-ttl: 3600
+  fineract-events:
+    enabled: false
+    topic: fineract-external-events
+    format: json
+  security:
+    encryption-key: ${ENCRYPTION_KEY:}
+    rate-limit:
+      requests-per-second: ${RATE_LIMIT_RPS:50}
+      window-seconds: 1
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+    xml:
+      max-size-kb: 5120
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    org.fineract.iso20022: INFO
+    org.springframework.web.reactive: WARN

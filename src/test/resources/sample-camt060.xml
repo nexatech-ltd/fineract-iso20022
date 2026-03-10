@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.060.001.07">
+    <AcctRptgReq>
+        <GrpHdr>
+            <MsgId>RPT-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+        </GrpHdr>
+        <RptgReq>
+            <Id>RPT-REQ-001</Id>
+            <ReqdMsgNmId>camt.052</ReqdMsgNmId>
+            <Acct>
+                <Id>
+                    <IBAN>DE89370400440532013000</IBAN>
+                </Id>
+            </Acct>
+        </RptgReq>
+    </AcctRptgReq>
+</Document>

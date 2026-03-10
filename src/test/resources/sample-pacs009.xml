@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.009.001.12">
+    <FICdtTrf>
+        <GrpHdr>
+            <MsgId>FI-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <SttlmInf>
+                <SttlmMtd>INDA</SttlmMtd>
+            </SttlmInf>
+        </GrpHdr>
+        <CdtTrfTxInf>
+            <PmtId>
+                <InstrId>FI-INSTR-001</InstrId>
+                <EndToEndId>FI-E2E-001</EndToEndId>
+                <TxId>FI-TXN-001</TxId>
+            </PmtId>
+            <IntrBkSttlmAmt Ccy="EUR">100000.00</IntrBkSttlmAmt>
+            <IntrBkSttlmDt>2025-01-20</IntrBkSttlmDt>
+            <Dbtr>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>DE89370400440532013000</Id>
+                    </Othr>
+                </Id>
+            </DbtrAcct>
+            <Cdtr>
+                <FinInstnId>
+                    <BICFI>BNPAFRPPXXX</BICFI>
+                </FinInstnId>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>FR7630006000011234567890189</Id>
+                    </Othr>
+                </Id>
+            </CdtrAcct>
+        </CdtTrfTxInf>
+    </FICdtTrf>
+</Document>

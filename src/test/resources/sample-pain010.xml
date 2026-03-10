@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.010.001.08">
+  <MndtAmdmntReq>
+    <GrpHdr>
+      <MsgId>PAIN010-TEST-001</MsgId>
+      <CreDtTm>2025-06-15T10:30:00+00:00</CreDtTm>
+    </GrpHdr>
+    <UndrlygAmdmntDtls>
+      <OrgnlMsgInf>
+        <MsgId>PAIN009-TEST-001</MsgId>
+        <MsgNmId>pain.009.001.08</MsgNmId>
+      </OrgnlMsgInf>
+      <Mndt>
+        <MndtId>MNDT-2025-001</MndtId>
+        <ColltnAmt Ccy="EUR">300.00</ColltnAmt>
+        <Cdtr>
+          <Nm>Creditor Corp</Nm>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>DE89370400440532013000</IBAN>
+          </Id>
+        </CdtrAcct>
+        <Dbtr>
+          <Nm>Debtor Person Updated</Nm>
+        </Dbtr>
+        <DbtrAcct>
+          <Id>
+            <IBAN>FR7630006000011234567890189</IBAN>
+          </Id>
+        </DbtrAcct>
+      </Mndt>
+    </UndrlygAmdmntDtls>
+  </MndtAmdmntReq>
+</Document>

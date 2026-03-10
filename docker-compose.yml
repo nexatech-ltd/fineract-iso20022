@@ -1,0 +1,163 @@
+services:
+
+  # ── MySQL (adapter DB) ─────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: iso20022-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${DB_NAME:-iso20022_adapter}
+      MYSQL_USER: ${DB_USERNAME:-iso20022}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-iso20022pass}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-time-zone=+00:00
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── DragonflyDB (Redis-compatible) ────────────────────
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: iso20022-dragonfly
+    ports:
+      - "6379:6379"
+    ulimits:
+      memlock: -1
+    volumes:
+      - dragonfly-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Kafka (KRaft mode) ────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: iso20022-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:29092", "--list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  # ── MariaDB for Fineract ─────────────────────────────
+  fineract-mariadb:
+    image: mariadb:11.0
+    container_name: fineract-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - fineract-mariadb-data:/var/lib/mysql
+      - ./docker/fineract-mariadb/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
+      timeout: 10s
+      retries: 10
+
+  # ── Apache Fineract ───────────────────────────────────
+  fineract:
+    image: apache/fineract:latest
+    container_name: iso20022-fineract
+    ports:
+      - "8443:8443"
+    depends_on:
+      fineract-mariadb:
+        condition: service_healthy
+    environment:
+      - FINERACT_NODE_ID=1
+      - FINERACT_HIKARI_DRIVER_SOURCE_CLASS_NAME=org.mariadb.jdbc.Driver
+      - FINERACT_HIKARI_JDBC_URL=jdbc:mariadb://fineract-mariadb:3306/fineract_tenants
+      - FINERACT_HIKARI_USERNAME=root
+      - FINERACT_HIKARI_PASSWORD=mysql
+      - FINERACT_HIKARI_MINIMUM_IDLE=3
+      - FINERACT_HIKARI_MAXIMUM_POOL_SIZE=10
+      - FINERACT_HIKARI_IDLE_TIMEOUT=60000
+      - FINERACT_HIKARI_CONNECTION_TIMEOUT=20000
+      - FINERACT_HIKARI_TEST_QUERY=SELECT 1
+      - FINERACT_HIKARI_AUTO_COMMIT=true
+      - FINERACT_DEFAULT_TENANTDB_HOSTNAME=fineract-mariadb
+      - FINERACT_DEFAULT_TENANTDB_PORT=3306
+      - FINERACT_DEFAULT_TENANTDB_UID=root
+      - FINERACT_DEFAULT_TENANTDB_PWD=mysql
+      - FINERACT_DEFAULT_TENANTDB_CONN_PARAMS=
+      - FINERACT_DEFAULT_TENANTDB_TIMEZONE=UTC
+      - FINERACT_DEFAULT_TENANTDB_IDENTIFIER=default
+      - FINERACT_DEFAULT_TENANTDB_NAME=fineract_default
+      - FINERACT_DEFAULT_TENANTDB_DESCRIPTION=Default Demo Tenant
+      - JAVA_TOOL_OPTIONS=-Xmx1G
+    healthcheck:
+      test: ["CMD", "sh", "-c", "echo -e 'Checking Fineract'; while ! nc -z localhost 8443; do sleep 1; printf \"-\"; done; echo ' >> Fineract started';"]
+      timeout: 10s
+      retries: 10
+      interval: 30s
+      start_period: 180s
+
+  # ── ISO 20022 Adapter ────────────────────────────────
+  adapter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: iso20022-adapter
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      fineract:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME:-iso20022}
+      DB_PASSWORD: ${DB_PASSWORD:-iso20022pass}
+      REDIS_HOST: dragonfly
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      FINERACT_API_URL: "https://fineract:8443/fineract-provider/api/v1"
+      FINERACT_API_USERNAME: ${FINERACT_API_USERNAME:-mifos}
+      FINERACT_API_PASSWORD: ${FINERACT_API_PASSWORD:-password}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+      ISO20022_FINERACT_EVENTS_ENABLED: "true"
+      ISO20022_FINERACT_EVENTS_TOPIC: "fineract-external-events"
+      ISO20022_FINERACT_EVENTS_FORMAT: "avro"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql-data:
+  dragonfly-data:
+  fineract-mariadb-data:

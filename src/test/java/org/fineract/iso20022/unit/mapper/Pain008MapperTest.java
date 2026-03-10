@@ -1,0 +1,65 @@
+package org.fineract.iso20022.unit.mapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.prowidesoftware.swift.model.mx.AbstractMX;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import org.fineract.iso20022.exception.MessageParsingException;
+import org.fineract.iso20022.mapper.Pain008Mapper;
+import org.fineract.iso20022.model.dto.InternalPaymentInstruction;
+import org.fineract.iso20022.model.enums.OperationType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+@Tag("unit")
+class Pain008MapperTest {
+
+    private Pain008Mapper mapper;
+
+    @BeforeEach
+    void setUp() {
+        mapper = new Pain008Mapper();
+    }
+
+    @Test
+    void shouldParsePain008Message() throws Exception {
+        String xml = loadSampleXml("sample-pain008.xml");
+        AbstractMX mx = AbstractMX.parse(xml);
+
+        List<InternalPaymentInstruction> instructions = mapper.toPaymentInstructions(mx);
+
+        assertThat(instructions).hasSize(1);
+
+        InternalPaymentInstruction instr = instructions.getFirst();
+        assertThat(instr.getMessageId()).isEqualTo("DD-TEST-001");
+        assertThat(instr.getMandateId()).isEqualTo("MNDT-001");
+        assertThat(instr.getCreditorName()).isEqualTo("Acme Corp");
+        assertThat(instr.getDebtorName()).isEqualTo("John Doe");
+        assertThat(instr.getAmount()).isEqualByComparingTo(new BigDecimal("500.00"));
+        assertThat(instr.getCurrency()).isEqualTo("EUR");
+        assertThat(instr.getOperationType()).isEqualTo(OperationType.DIRECT_DEBIT);
+        assertThat(instr.getOriginalMessageType()).isEqualTo("pain.008");
+    }
+
+    @Test
+    void shouldThrowOnWrongMessageType() {
+        AbstractMX fakeMx = AbstractMX.parse(loadSampleXml("sample-pain001.xml"));
+
+        assertThatThrownBy(() -> mapper.toPaymentInstructions(fakeMx))
+                .isInstanceOf(MessageParsingException.class)
+                .hasMessageContaining("Expected pain.008");
+    }
+
+    private String loadSampleXml(String filename) {
+        try (var is = getClass().getClassLoader().getResourceAsStream(filename)) {
+            assert is != null : "Sample file not found: " + filename;
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load " + filename, e);
+        }
+    }
+}

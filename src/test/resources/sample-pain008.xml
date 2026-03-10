@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.11">
+    <CstmrDrctDbtInitn>
+        <GrpHdr>
+            <MsgId>DD-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>500.00</CtrlSum>
+            <InitgPty>
+                <Nm>Acme Corp</Nm>
+            </InitgPty>
+        </GrpHdr>
+        <PmtInf>
+            <PmtInfId>PMT-DD-001</PmtInfId>
+            <PmtMtd>DD</PmtMtd>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>500.00</CtrlSum>
+            <ReqdColltnDt>2025-01-20</ReqdColltnDt>
+            <Cdtr>
+                <Nm>Acme Corp</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <IBAN>DE89370400440532013000</IBAN>
+                </Id>
+                <Ccy>EUR</Ccy>
+            </CdtrAcct>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </CdtrAgt>
+            <DrctDbtTxInf>
+                <PmtId>
+                    <InstrId>DD-INSTR-001</InstrId>
+                    <EndToEndId>DD-E2E-001</EndToEndId>
+                </PmtId>
+                <InstdAmt Ccy="EUR">500.00</InstdAmt>
+                <DrctDbtTx>
+                    <MndtRltdInf>
+                        <MndtId>MNDT-001</MndtId>
+                    </MndtRltdInf>
+                </DrctDbtTx>
+                <Dbtr>
+                    <Nm>John Doe</Nm>
+                </Dbtr>
+                <DbtrAcct>
+                    <Id>
+                        <IBAN>FR7630006000011234567890189</IBAN>
+                    </Id>
+                </DbtrAcct>
+                <DbtrAgt>
+                    <FinInstnId>
+                        <BICFI>BNPAFRPPXXX</BICFI>
+                    </FinInstnId>
+                </DbtrAgt>
+            </DrctDbtTxInf>
+        </PmtInf>
+    </CstmrDrctDbtInitn>
+</Document>

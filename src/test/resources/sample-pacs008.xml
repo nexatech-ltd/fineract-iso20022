@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.10">
+    <FIToFICstmrCdtTrf>
+        <GrpHdr>
+            <MsgId>PACS-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <SttlmInf>
+                <SttlmMtd>INDA</SttlmMtd>
+            </SttlmInf>
+        </GrpHdr>
+        <CdtTrfTxInf>
+            <PmtId>
+                <InstrId>PACS-INSTR-001</InstrId>
+                <EndToEndId>PACS-E2E-001</EndToEndId>
+                <TxId>TXN-001</TxId>
+            </PmtId>
+            <IntrBkSttlmAmt Ccy="EUR">500.00</IntrBkSttlmAmt>
+            <IntrBkSttlmDt>2025-01-20</IntrBkSttlmDt>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+            <Dbtr>
+                <Nm>Alpha Corp</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <IBAN>DE89370400440532013000</IBAN>
+                </Id>
+            </DbtrAcct>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BICFI>BNPAFRPPXXX</BICFI>
+                </FinInstnId>
+            </CdtrAgt>
+            <Cdtr>
+                <Nm>Beta Ltd</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <IBAN>FR7630006000011234567890189</IBAN>
+                </Id>
+            </CdtrAcct>
+            <RmtInf>
+                <Ustrd>Trade settlement</Ustrd>
+            </RmtInf>
+        </CdtTrfTxInf>
+    </FIToFICstmrCdtTrf>
+</Document>

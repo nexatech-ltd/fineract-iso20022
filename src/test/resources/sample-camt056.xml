@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.056.001.11">
+    <FIToFIPmtCxlReq>
+        <Assgnmt>
+            <Id>CXL-CASE-001</Id>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+        </Assgnmt>
+        <Undrlyg>
+            <OrgnlGrpInfAndCxl>
+                <OrgnlMsgId>ORIG-MSG-001</OrgnlMsgId>
+            </OrgnlGrpInfAndCxl>
+            <TxInf>
+                <CxlId>CXL-INSTR-001</CxlId>
+                <OrgnlEndToEndId>ORIG-E2E-001</OrgnlEndToEndId>
+                <OrgnlTxId>ORIG-TXN-001</OrgnlTxId>
+                <OrgnlIntrBkSttlmAmt Ccy="EUR">2500.00</OrgnlIntrBkSttlmAmt>
+                <CxlRsnInf>
+                    <Rsn>
+                        <Cd>DUPL</Cd>
+                    </Rsn>
+                </CxlRsnInf>
+            </TxInf>
+        </Undrlyg>
+    </FIToFIPmtCxlReq>
+</Document>

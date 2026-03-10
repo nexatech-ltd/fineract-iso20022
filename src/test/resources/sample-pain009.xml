@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.009.001.08">
+  <MndtInitnReq>
+    <GrpHdr>
+      <MsgId>PAIN009-TEST-001</MsgId>
+      <CreDtTm>2025-06-15T10:30:00+00:00</CreDtTm>
+    </GrpHdr>
+    <Mndt>
+      <MndtId>MNDT-2025-001</MndtId>
+      <MndtReqId>REQ-001</MndtReqId>
+      <Ocrncs>
+        <SeqTp>RCUR</SeqTp>
+        <FrstColltnDt>2025-07-01</FrstColltnDt>
+        <FnlColltnDt>2026-06-30</FnlColltnDt>
+      </Ocrncs>
+      <ColltnAmt Ccy="EUR">250.00</ColltnAmt>
+      <MaxAmt Ccy="EUR">500.00</MaxAmt>
+      <Cdtr>
+        <Nm>Creditor Corp</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013000</IBAN>
+        </Id>
+      </CdtrAcct>
+      <CdtrAgt>
+        <FinInstnId>
+          <BICFI>COBADEFFXXX</BICFI>
+        </FinInstnId>
+      </CdtrAgt>
+      <Dbtr>
+        <Nm>Debtor Person</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>FR7630006000011234567890189</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BICFI>BNPAFRPPXXX</BICFI>
+        </FinInstnId>
+      </DbtrAgt>
+    </Mndt>
+  </MndtInitnReq>
+</Document>

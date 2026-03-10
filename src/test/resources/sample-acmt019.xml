@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:acmt.019.001.04">
+  <AcctClsgReq>
+    <Refs>
+      <MsgId>
+        <Id>ACMT019-TEST-001</Id>
+        <CreDtTm>2025-06-15T10:30:00+00:00</CreDtTm>
+      </MsgId>
+    </Refs>
+    <AcctId>
+      <Id>
+        <Othr>
+          <Id>12345</Id>
+        </Othr>
+      </Id>
+      <Nm>Test Account</Nm>
+      <Ccy>EUR</Ccy>
+    </AcctId>
+    <BalTrfAcct>
+      <Id>
+        <IBAN>FR7630006000011234567890189</IBAN>
+      </Id>
+    </BalTrfAcct>
+  </AcctClsgReq>
+</Document>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:acmt.007.001.05">
+  <AcctOpngReq>
+    <Refs>
+      <MsgId>
+        <Id>ACMT007-TEST-001</Id>
+        <CreDtTm>2025-06-15T10:30:00+00:00</CreDtTm>
+      </MsgId>
+    </Refs>
+    <Acct>
+      <Id>
+        <IBAN>NL91ABNA0417164300</IBAN>
+      </Id>
+      <Nm>Test Savings Account</Nm>
+      <Ccy>EUR</Ccy>
+      <AcctPurp>CASH</AcctPurp>
+    </Acct>
+    <Org>
+      <FullLglNm>Test Organization GmbH</FullLglNm>
+      <CtryOfOpr>DE</CtryOfOpr>
+    </Org>
+  </AcctOpngReq>
+</Document>

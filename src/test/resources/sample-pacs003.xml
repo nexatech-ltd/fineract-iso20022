@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.003.001.11">
+    <FIToFICstmrDrctDbt>
+        <GrpHdr>
+            <MsgId>PACS003-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <SttlmInf>
+                <SttlmMtd>INDA</SttlmMtd>
+            </SttlmInf>
+        </GrpHdr>
+        <DrctDbtTxInf>
+            <PmtId>
+                <InstrId>PACS003-INSTR-001</InstrId>
+                <EndToEndId>PACS003-E2E-001</EndToEndId>
+                <TxId>TXN-001</TxId>
+            </PmtId>
+            <IntrBkSttlmAmt Ccy="EUR">100.00</IntrBkSttlmAmt>
+            <ReqdColltnDt>2025-01-20</ReqdColltnDt>
+            <DrctDbtTx>
+                <MndtRltdInf>
+                    <MndtId>MNDT-002</MndtId>
+                </MndtRltdInf>
+            </DrctDbtTx>
+            <Dbtr>
+                <Nm>John Doe</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <IBAN>DE89370400440532013000</IBAN>
+                </Id>
+            </DbtrAcct>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>COBADEFFXXX</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+            <Cdtr>
+                <Nm>Acme Corp</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <IBAN>FR7630006000011234567890189</IBAN>
+                </Id>
+            </CdtrAcct>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BICFI>BNPAFRPPXXX</BICFI>
+                </FinInstnId>
+            </CdtrAgt>
+        </DrctDbtTxInf>
+    </FIToFICstmrDrctDbt>
+</Document>

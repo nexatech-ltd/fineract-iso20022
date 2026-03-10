@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.004.001.14">
+    <PmtRtr>
+        <GrpHdr>
+            <MsgId>RTR-TEST-001</MsgId>
+            <CreDtTm>2025-01-15T10:30:00+00:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <SttlmInf>
+                <SttlmMtd>INDA</SttlmMtd>
+            </SttlmInf>
+        </GrpHdr>
+        <OrgnlGrpInf>
+            <OrgnlMsgId>ORIG-PACS-001</OrgnlMsgId>
+        </OrgnlGrpInf>
+        <TxInf>
+            <RtrId>RTR-INSTR-001</RtrId>
+            <OrgnlEndToEndId>ORIG-E2E-001</OrgnlEndToEndId>
+            <OrgnlTxId>ORIG-TXN-001</OrgnlTxId>
+            <RtrdIntrBkSttlmAmt Ccy="EUR">5000.00</RtrdIntrBkSttlmAmt>
+            <RtrRsnInf>
+                <Rsn>
+                    <Cd>AC04</Cd>
+                </Rsn>
+            </RtrRsnInf>
+        </TxInf>
+    </PmtRtr>
+</Document>
